@@ -20,3 +20,8 @@ class LogoutHandler(AuthHandler):
 
         self.set_status(200)
         self.write_json()
+
+        self.current_user = None
+
+        self.set_status(200)
+        self.write_json()

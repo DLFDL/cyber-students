@@ -22,7 +22,7 @@ class Application(Application):
             (r'/students/api/user', UserHandler)
         ]
 
-        settings = dict()
+        settings = {'autoreload': True}
 
         super(Application, self).__init__(handlers, **settings)
 

@@ -1,5 +1,43 @@
 # `cyber-students`
 
+Registration.py is responsible for user registration by securely handling
+sensitive user information through encryption and password hashing. 
+This ensures that the stored data in the database is protected, 
+and even if the database is compromised, the sensitive information remains secure.
+
+Registration.py retrieves user data during the registration process. 
+Encrypts sensitive user data using AES (Advanced Encryption Standard) in CTR (Counter) mode. 
+The encrypted data (ciphertext) is then stored in the database. 
+A random 32-bytes key is generated for encryption implements a method for hashing user passwords. 
+The password hash and salt are saved in the database.
+
+Login.py retrieves the hashed password and salt from the database for a given email. 
+An error is returned if the email, password, or salt is missing or invalid. 
+The entered password is hashed using the stored salt. 
+A token is generated and returned if the newly hashed password matches the stored hashed password. 
+If the password does not match, an error is returned.
+
+User.py, handling the GET request to retrieve the user's information, 
+it first checks if the user is authenticated using the token. 
+If the user is authenticated, the handler retrieves the encrypted user data, nonce, and password hash from the database. 
+Using AES-CTR encryption, the password hash is used as the encryption key to decrypt the encrypted user data. 
+The decrypted user data is then included in the response object, which is returned to the user.
+
+A new user can be added and check using the following:
+
+Registration:
+curl -X POST http://localhost:4000/students/api/registration -d "{\"email\": \"helloworld@test.com\", \"password\": \"1GoodPassWord\", \"displayName\": \"daniel\", \"fullName\": \"daniel lazarczyk\", \"address\": \"11 any street\", \"phone\": \"023874078\", \"disabilities\": \"crazy\"}"
+
+Logging In:
+curl -X POST http://localhost:4000/students/api/login -d "{\"email\": \"helloworld@test.com\", \"password\": \"1GoodPassWord\"}"
+
+Displaying a Profile:
+curl -H "X-TOKEN: bf546448ab864bd8b02476ac2f74765d" http://localhost:4000/students/api/user
+
+Logging Out:
+curl -X POST -H "X-TOKEN: bf546448ab864bd8b02476ac2f74765d" http://localhost:4000/students/api/logout
+
+
 This repository provides some sample code for the Shared Project for
 Modern Cryptography and Security Management & Compliance.  The project
 requires git, Python 3, and MongoDB.  The following sections briefly
